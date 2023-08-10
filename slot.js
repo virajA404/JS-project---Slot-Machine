@@ -8,7 +8,6 @@
 
 
 //Collecting Deposit money
-
 const prompt = require("prompt-sync")();
 
 const deposit =()=>{
@@ -18,14 +17,14 @@ const deposit =()=>{
 
         if(isNaN(numberAmount) || numberAmount <= 0) {
             console.log("The deposit amount is not valid. Please try again.");
-            // deposit();
         }
         else{
             return(numberAmount);
         }
     }
-}
+};
 
+//2. Add number of lines to bet 
 const getNumberOfBetLines =()=>{
     while(true) {
         const lines = prompt("How many lines you want to bet? (1-3): ");
@@ -33,17 +32,34 @@ const getNumberOfBetLines =()=>{
 
         if(isNaN(numberOfLines) || numberOfLines <= 0 || numberOfLines > 3) {
             console.log("Invalid number of lines. Please try again");
-            // getNumberOfBetLines();
         }
         else{
             return(numberOfLines);
         }
     }        
-}
+};
 
-const amount = deposit();
+//3. Collect the bet amount.
+const getBet = (balanceAmount, lines)=>{
+    while(true) {
+        const betAmount = prompt("How much would you like to bet for each reel?: ");
+        const numberBetAmount = parseFloat(betAmount)
+
+        if(isNaN(numberBetAmount) || numberBetAmount <= 0) {
+            console.log("The bet amount is not valid. Please try again.");
+        }
+        else if(numberBetAmount > balanceAmount / lines) {
+            console.log("You do not have enough money. Please try again.");
+        }
+        else{
+            return(numberBetAmount);
+        }
+    }
+};    
+
+let balanceAmount = deposit();
 const numberOfLines = getNumberOfBetLines();
+const betAmount = getBet(balanceAmount,numberOfLines);
 
-
-console.log("You have deposited $" + amount + " For: " + numberOfLines + " Lines");
+// console.log("You have deposited $" + amount + " For " + numberOfLines + " Lines");
 
