@@ -41,6 +41,8 @@ const deposit =()=>{
         }
     }
 };
+//1. Collecting Deposit money -- ENDS HERE
+
 
 //2. Add number of lines to bet 
 const getNumberOfBetLines =()=>{
@@ -56,6 +58,9 @@ const getNumberOfBetLines =()=>{
         }
     }        
 };
+
+//2. Add number of lines to bet -- ENDS HERE
+
 
 //3. Collect the bet amount.
 const getBet = (balanceAmount, lines)=>{
@@ -74,9 +79,10 @@ const getBet = (balanceAmount, lines)=>{
         }
     }
 };    
+//3. Collect the bet amount. -- ENDS HERE
+
 
 //4. Spin the slot machine
-
 const spin = ()=> {
     //adding symbols to a array
     const symbols = [];
@@ -87,8 +93,9 @@ const spin = ()=> {
     }
     
     // Getting symbols from "symbols" array and adding them to each reel   
-    const reels = [[],[],[]]; //Each nested array represent column(reel) in slot machine
+    const reels = []; 
     for(let i=0; i<COLS; i++){
+        reels.push([]); //adding a reel 
         const reelSymbols = [...symbols];
         for(let j=0; j < ROWS; j++){
             const randomIndex = Math.floor(Math.random() * reelSymbols.length); //math.floor - round the number to the nearest lower number
@@ -99,12 +106,78 @@ const spin = ()=> {
     }
     return(reels);
 };
+//4. Spin the slot machine -- ENDS HERE
 
 
+//5. Check if the user won
+const transpose = (reels) => {
+    //creating array for each row
+    const rows = [];
+
+    //pushing symbols from reels array to rows array
+    for(let i=0; i<ROWS; i++){
+        rows.push([]);
+        for(let j=0; j<COLS; j++){
+            rows[i].push(reels[j][i]);
+        }
+    }
+    return(rows);
+};
+
+//print rows
+const printRows = (rows) => {
+    for(const row of rows){
+        let rowString = "";
+        for(const[i,symbol] of row.entries()){
+            rowString += symbol;
+            if(i != row.length - 1){
+                rowString += " | ";
+            }
+        }
+        console.log(rowString);
+    }
+};
+//5. Check if the user won --ENDS HERE
+
+
+//6. Check if the user won 
+const getWinner = (rows,betAmount,lines) => {
+    let winnings = 0;
+    for(let row=0; row<lines; row++){   
+        const symbols = rows[row];
+        let allSame = true;
+        
+        for(const symbol of symbols){
+            if(symbol!= symbols[0]){
+                allSame = false;
+                break;
+            }
+        }
+        if(allSame){
+            winnings += betAmount * SYMBOLS_VALUES[symbols[0]];
+        }
+    }
+    return (winnings);
+};
+//6. Check if the user won --ENDS HERE 
+
+
+
+let balanceAmount = deposit();
+const numberOfLines = getNumberOfBetLines();
+const betAmount = getBet(balanceAmount,numberOfLines);
 const reels = spin();
-console.log(reels)
-// let balanceAmount = deposit();
-// const numberOfLines = getNumberOfBetLines();
-// const betAmount = getBet(balanceAmount,numberOfLines);
+console.log(reels);
+
+const rows = transpose(reels);
+console.log(rows);
+
+printRows(rows);
+
+
+const win = getWinner(rows,betAmount,numberOfLines);
+console.log("You won, " + "$" + win.toString());
+
+
 
 
