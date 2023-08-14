@@ -1,1 +1,1 @@
-This is a slot machine game created using Js.
+This is a slot machine game created using JavaScript.
